@@ -1,18 +1,5 @@
 
 <% include partials/header %>
-<nav class="navbar nav-bar default">
-        <a class="navbar-brand" href="/">YelpCamp</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="/">Login</a></li>
-            <li><a href="/">SignUp</a></li>
-            <li><a href="/">Logout</a></li>
-          </ul>
-        </div>
-      </nav>
 <div class="container ">
 <div class="jumbotron">
   <div class="text-center">
@@ -30,6 +17,7 @@
         <div class="caption">
             <h2><%=campground["name"]%></h2>
         </div>
+        <a class="btn btn-primary" href="/campgrounds/<%=campground._id %>">More info</a>
       </div>
      </div>
      <% }); %>
@@ -38,4 +26,3 @@
  </div>
 </div>
 
-<% include partials/footer %> 
