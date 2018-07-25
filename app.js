@@ -32,6 +32,7 @@ res.render("landing");
 //Get all campgrounds from DB and display on the page
 
 app.get("/campgrounds",function(req,res){
+  
   Campground.find({},function(err,allCampgrounds){
     if(err){
       console.log(err);
@@ -39,11 +40,10 @@ app.get("/campgrounds",function(req,res){
      res.render("campgrounds",{campgrounds :allCampgrounds});
     }
   });
- 
-
 });
 
 //Add campgrounds to DB and Redirect to  allCampgrounds page
+
 app.post("/campgrounds",function(req,res){
   var name = req.body.name;
   var image = req.body.image;
