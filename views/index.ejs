@@ -2,7 +2,7 @@
 <% include partials/header %>
 <div class="container ">
 <div class="jumbotron">
-  <div class="text-center">
+  <div class="text-left">
       <h1>All campgrounds</h1>
       <p>Our best campgrounds from all over the world</p>
      <p><a class="btn btn-info" href="/campgrounds/new">Add a new campground</a></p>
@@ -13,12 +13,14 @@
      <% campgrounds.forEach(function(campground){ %>
       <div class="col-md-4 col-sm-6">
         <div class="thumbnail">
-            <img class="img-thumbnail" src="<%=campground["image"]%>">
-        <div class="caption">
-            <h2><%=campground["name"]%></h2>
+            <img class="img-thumbnail" src="<%=campground["image"]%>" width="300px" height="250px">
+        <div class="text-center p-1">
+            <h3><%=campground["name"]%></h3>
         </div>
-        <a class="btn btn-primary" href="/campgrounds/<%=campground._id %>">More info</a>
-      </div>
+        <div class="text-center p-1">
+            <a class="btn btn-primary" href="/campgrounds/<%=campground._id %>">More info</a>
+        </div>
+        </div>
      </div>
      <% }); %>
     </div>
