@@ -1,19 +1,37 @@
 
 <% include partials/header %>
-<div class="container">
+<nav class="navbar nav-bar default">
+        <a class="navbar-brand" href="/">YelpCamp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/">Login</a></li>
+            <li><a href="/">SignUp</a></li>
+            <li><a href="/">Logout</a></li>
+          </ul>
+        </div>
+      </nav>
+<div class="container ">
 <div class="jumbotron">
-    <h1>All campgrounds</h1>
-     <p>Our best campgrounds from all over the world</p>
-    <p><a class="btn btn-info" href="/campgrounds/new">Add a new camp ground</a></p>
-    
+  <div class="text-center">
+      <h1>All campgrounds</h1>
+      <p>Our best campgrounds from all over the world</p>
+     <p><a class="btn btn-info" href="/campgrounds/new">Add a new campground</a></p>
+  </div>
 </div>
 <div class="container">
     <div class="row">
      <% campgrounds.forEach(function(campground){ %>
       <div class="col-md-4 col-sm-6">
-          <h2><%=campground["name"]%></h2>
-          <img class="img-thumbnail" src="<%=campground["image"]%>">
+        <div class="thumbnail">
+            <img class="img-thumbnail" src="<%=campground["image"]%>">
+        <div class="caption">
+            <h2><%=campground["name"]%></h2>
+        </div>
       </div>
+     </div>
      <% }); %>
     </div>
     </div>
