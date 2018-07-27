@@ -2,46 +2,14 @@ var epxress = require("express");
 var app = epxress();
 var bodyParser = require("body-parser");
 var mongoose =require("mongoose");
+var Campground = require("./models/campground");
+var seedDB =require("./seed")
 
-
+seedDB();
 mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("view engine","ejs");
-
-//schema set up
-
-
-var campgroundSchenma = new mongoose.Schema({
-    name:String,
-    image:String,
-    description:String
-});
-
-//DB model setup
-
-
-var Campground = mongoose.model("Campground",campgroundSchenma);
-
-
-/*  
-Campground.create(
-  {
-    name:"savigny-sur-orge",
-    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo3LdkliSnSyLOOwMB_QRCvoqetXRxgpn9vhyInAWFy7SkFucs",
-    description:"This is the best place stay at the campground"
-  },
-  function(err,campground){
-
-  if(err){
-    console.log(err)
-  }else{
-    console.log("New Campground has been created");
-    console.log(campground);
-  }
-}) */;
-
-
 
 //Landing page 
 
