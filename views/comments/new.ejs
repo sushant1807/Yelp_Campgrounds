@@ -1,22 +1,20 @@
 <% include ../partials/header %>
 <div class="container">
-<div class="jumbotron">
-    <h1>Add new comment</h1>:
-  </div>
-   <div class="p-3">
+     <h1>Add new comment on :<span class="text-info"><%= campground.name %> </span> </h1>
+ <div class="p-3">
    <form action="/campgrounds/<%=campground._id%>/comments" method="POST" >
     <div class="form-group row">
-        <label for="name" class="col-sm-2 col-form-label p-3">Text:</label>
+        <label for="name" class="col-sm-2 col-form-label p-3">Comment:</label>
         <div class="col-sm-10 p-3">
-            <input type="text" class="form-control" id="name" name ="comment[text]" placeholder="text" >
+            <input type="text" class="form-control" id="name" name ="comment[text]" placeholder="your comment" >
         </div>
-         <label for="name" class="col-sm-2 col-form-label p-3">Author Name:</label>
+         <label for="name" class="col-sm-2 col-form-label p-3">Your Name:</label>
             <div class="col-sm-10 p-3">
-               <input type="text" class="form-control" id="name" name ="comment[author]" placeholder="author" >
+               <input type="text" class="form-control" id="name" name ="comment[author]" placeholder="Your name" >
       </div>
      </div>
      <div class="form-group">
-        <button type="submit" class="btn btn-lg-primary custom">Submit</button>
+        <button type="submit" class="btn btn-success">Add your comment</button>
      </div>
       
   </form>

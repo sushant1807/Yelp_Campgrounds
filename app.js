@@ -33,14 +33,15 @@ app.get("/campgrounds",function(req,res){
 //POST ALL CAMPGROUNDS TO DB AND REDIRECT TO CAMGROUNDS PAGE
 
 app.post("/campgrounds",function(req,res){
-  var name = req.body.name;
+ /*  var name = req.body.name;
   var image = req.body.image;
   var desc =req.body.description;
   var newCampground = {
     name:name,
     image:image,
     description:desc
-  };
+  }; */
+  var newCampground = req.body.Campground;
   Campground.create(newCampground,function(err,newlyCreated){
     if(err){
         console.log(err);
