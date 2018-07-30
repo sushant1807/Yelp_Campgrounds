@@ -4,14 +4,27 @@ var bodyParser = require("body-parser");
 var mongoose =require("mongoose");
 var Campground = require("./models/campground");
 var Comment =require("./models/comment");
-var localStrategy = ("passport-local");
 var passport = require("passport");
+var LocalStrategy = require("passport-local");
+var session = require("express-session");
 var User = require("./models/user");
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended:true}));
-
 app.set("view engine","ejs");
+app.use(epxress.static(__dirname + "/public"));
+//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+ secret : "I am a cool boy",
+ resave:false,
+ saveUninitialized:false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 
 //LANDING PAGE
@@ -111,10 +124,50 @@ Campground.findById(req.params.id,function(err,campground){
   
   }
 });
- //create new comment
- //
+ 
   
 });
+//AUTH ROUTES 
+
+app.get("/register",function(req,res){
+ res.render("register");
+});
+
+//HANDLE SIGNUP ROUTE
+app.post("/register",function(req,res){
+var newUser = new User({username : req.body.username});
+User.register(newUser,req.body.password,function(err,user){
+  if(err){
+    console.log(err);
+    return res.render("register");
+  }
+  passport.authenticate("local")(req,res,function(){
+    res.redirect("/campgrounds");
+  });
+});
+});
+
+//show LoginForm
+
+app.get("/login",function(req,res){
+  res.render("login");
+});
+//Submit Route for login
+
+app.post('/login', passport.authenticate('local',
+        {   successRedirect:"/campgrounds",
+            failureRedirect: '/login'
+        }),function(req, res) {
+          
+            res.redirect('/');
+  });
+
+  //log out
+  app.get("/logout",function(req,res){
+      req.logout();
+     res.redirect("/");
+
+  });
 
 //APP RUNNING AT PORT 3000
 
