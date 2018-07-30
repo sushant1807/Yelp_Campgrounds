@@ -4,6 +4,9 @@ var bodyParser = require("body-parser");
 var mongoose =require("mongoose");
 var Campground = require("./models/campground");
 var Comment =require("./models/comment");
+var localStrategy = ("passport-local");
+var passport = require("passport");
+var User = require("./models/user");
 
 mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended:true}));
