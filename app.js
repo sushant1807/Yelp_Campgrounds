@@ -1,5 +1,5 @@
-var epxress = require("express");
-var app = epxress();
+var express = require("express");
+var app = express();
 var bodyParser = require("body-parser");
 var mongoose =require("mongoose");
 var Campground = require("./models/campground");
@@ -9,10 +9,11 @@ var LocalStrategy = require("passport-local");
 var session = require("express-session");
 var User = require("./models/user");
 
+
 mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
-app.use(epxress.static(__dirname + "/public"));
+app.use(express.static(__dirname + "/public"));
 //PASSPORT CONFIGURATION
 app.use(require("express-session")({
  secret : "I am a cool boy",
@@ -86,13 +87,14 @@ res.render("campgrounds/new");
 
 app.get("/campgrounds/:id",function(req,res){
    //find a campground with Provided ID
-Campground.findById(req.params.id).populate("comments").exec(function(err,foundCampground){
-  if(err){
-     console.log(err);
-     }else{
-    res.render("campgrounds/show",{campgrounds:foundCampground});
-  };
-});
+    Campground.findById(req.params.id).populate("comments").exec(function(err,foundCampground){
+      if(err){
+         console.log(err);
+         }else{
+        res.render("campgrounds/show",{campgrounds:foundCampground});
+      };
+    });
+
 });
 
 //==================COMMMENTS ROUTES==========================//
@@ -164,7 +166,8 @@ app.get("/login",function(req,res){
 
 app.post('/login', passport.authenticate('local',
         {   successRedirect:"/campgrounds",
-            failureRedirect: '/login'
+            failureRedirect: '/login',
+
         }),function(req, res) {
 
             res.redirect('/');
