@@ -25,7 +25,12 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+//Current User
 
+app.use(function(req,res,next){
+  res.locals.currentUser =req.user;
+  next();
+})
 
 //LANDING PAGE
 
@@ -36,12 +41,11 @@ res.render("landing");
 //GET ALL CAMPGROUNDS TO INDEX PAGE 
 
 app.get("/campgrounds",function(req,res){
-
   Campground.find({},function(err,allCampgrounds){
     if(err){
       console.log(err);
     }else{
-     res.render("campgrounds/index",{campgrounds :allCampgrounds});
+     res.render("campgrounds/index",{campgrounds:allCampgrounds});
     }
   });
 });
@@ -57,7 +61,9 @@ app.post("/campgrounds",function(req,res){
     image:image,
     description:desc
   }; */
+
   var newCampground = req.body.Campground;
+
   Campground.create(newCampground,function(err,newlyCreated){
     if(err){
         console.log(err);
@@ -70,7 +76,9 @@ app.post("/campgrounds",function(req,res){
 //ADD NEW CAMPGROUND TEMPLATE
 
 app.get("/campgrounds/new",function(req,res){
+
 res.render("campgrounds/new");
+
 });
 
 
@@ -91,7 +99,7 @@ Campground.findById(req.params.id).populate("comments").exec(function(err,foundC
 
 //GET COMMENTS ROUTE
 
-app.get("/campgrounds/:id/comments/new",function(req,res){
+app.get("/campgrounds/:id/comments/new",isLoggedIn,function(req,res){
   //find capmground by ID
   Campground.findById(req.params.id,function(err,campground){
     if(err){
@@ -105,7 +113,7 @@ app.get("/campgrounds/:id/comments/new",function(req,res){
  
 
 //POST ALL COMMENTS ROUTE
-app.post("/campgrounds/:id/comments",function(req,res){
+app.post("/campgrounds/:id/comments",isLoggedIn,function(req,res){
  //lookup campground using ID
 Campground.findById(req.params.id,function(err,campground){
   if(err){
@@ -158,19 +166,28 @@ app.post('/login', passport.authenticate('local',
         {   successRedirect:"/campgrounds",
             failureRedirect: '/login'
         }),function(req, res) {
-          
+
             res.redirect('/');
   });
 
   //log out
   app.get("/logout",function(req,res){
-      req.logout();
+     req.logout();
      res.redirect("/");
 
   });
 
+
+
+  function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+      return next();
+    }
+    res.redirect("/login");
+  }
+
 //APP RUNNING AT PORT 3000
 
 app.listen(3000,function(){
-console.log("yelpcamp Server has strated..");
+console.log("yelpcamp Server has strated....");
 });
