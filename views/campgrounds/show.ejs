@@ -27,7 +27,7 @@
          </div>
          <div>
             <% campgrounds.comments.forEach(function(comment){ %>
-              <p><strong><%= comment.author %></strong>-<span><%= comment.text %></span><span class="blockquote-footer font-italic"><%= comment.Created.toDateString()%></span></p>
+              <p><strong><%= comment.author.username %></strong>-<span><%= comment.text %></span><span class="blockquote-footer font-italic"><%= comment.Created.toDateString()%></span></p>
               <% });%>
          </div>
     </div>

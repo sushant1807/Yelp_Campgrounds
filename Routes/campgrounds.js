@@ -4,7 +4,7 @@ var Campground = require("../models/campground");
   
   //GET ALL CAMPGROUNDS TO INDEX PAGE 
   
-  router.get("/campgrounds",function(req,res){
+  router.get("/",function(req,res){
     Campground.find({},function(err,allCampgrounds){
       if(err){
         console.log(err);
@@ -16,7 +16,7 @@ var Campground = require("../models/campground");
   
   //POST ALL CAMPGROUNDS TO DB AND REDIRECT TO CAMGROUNDS PAGE
   
-  router.post("/campgrounds",function(req,res){
+  router.post("/",isLoggedIn,function(req,res){
   
   
     var newCampground = req.body.Campground;
@@ -32,16 +32,15 @@ var Campground = require("../models/campground");
   
   //ADD NEW CAMPGROUND TEMPLATE
   
-  router.get("/campgrounds/new",function(req,res){
+  router.get("/new", isLoggedIn,function(req,res){
   
   res.render("campgrounds/new");
   
   });
   
+   //SHOW ALL CAMPGROUNDS ROUTE
   
-  //SHOW ALL CAMPGROUNDS ROUTE
-  
-  router.get("/campgrounds/:id",function(req,res){
+  router.get("/:id",function(req,res){
      //find a campground with Provided ID
       Campground.findById(req.params.id).populate("comments").exec(function(err,foundCampground){
         if(err){
@@ -50,6 +49,14 @@ var Campground = require("../models/campground");
           res.render("campgrounds/show",{campgrounds:foundCampground});
         };
       });
+   });
+
+   //middleware 
+  function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+      return next();
+    }
+    res.redirect("/login");
+  }
   
-  });
   module.exports = router;
