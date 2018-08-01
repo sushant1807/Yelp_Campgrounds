@@ -17,12 +17,21 @@
            <h4> $10-night </h4>
         <h4><a href=""><%= campground.name %></a></h4>
         
-       <p class="p-3">Submited by-<i><strong><%= campground.author.username %></strong></i></p>
+       <p class="p-3"><em></em>Submited by-<%= campground.author.username %></em></p>
         </div>
         <p class="p-3"><%= campground.description %></p>
-      </div>
-  
+      
+       
+ 
+          <a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit </a>
+            <form  id="delete-from" action="/campgrounds/<%=campground._id%>?_method=DELETE" method="POST">
+               <button class="btn btn-danger" type="submit" >Delete</button>
+           </form>
 
+
+        
+      </div>
+     
       <div class="p-5">
           <div class="text-right">
               <a  class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">

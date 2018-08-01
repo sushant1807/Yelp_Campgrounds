@@ -1,6 +1,8 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
+var methodOverride = require("method-override");
+router.use(methodOverride('_method'));
   
   //GET ALL CAMPGROUNDS TO INDEX PAGE 
   
@@ -63,5 +65,47 @@ var Campground = require("../models/campground");
     }
     res.redirect("/login");
   }
-  
+  //EDIT CAMPGROUND ROUTE
+
+
+  router.get("/:id/edit",function(req,res){
+    Campground.findById(req.params.id,function(err,foundCampground){
+           if(err){
+             res.redirect("/campgrounds")
+           }else{
+            res.render("campgrounds/edit",{campground : foundCampground});
+           }
+          });
+      });
+
+      //UPDATE CAMPGROUND ROUTE
+      router.put("/:id",function(req,res){
+        var name = req.body.name;
+        var image = req.body.image;
+        var description =req.body.description ;
+        var newCampground= { name:name,image:image,description:description};
+
+        Campground.findByIdAndUpdate(req.params.id,newCampground,function(err,updatedCampground){
+          if(err){
+            res.redirect("/campgrounds")
+          }else{
+            res.redirect("/campgrounds/"+req.params.id);
+          }
+        })
+        });
+
+        //DELETE CAMPGROUND 
+
+        router.delete("/:id",function(req,res){
+          
+          Campground.findByIdAndRemove(req.params.id,function(err){
+            if(err){
+              res.send(err);
+            }else{
+              res.redirect("/campgrounds");
+            }
+          });
+        });
+
+    
   module.exports = router;

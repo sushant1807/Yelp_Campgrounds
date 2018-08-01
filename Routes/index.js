@@ -43,7 +43,7 @@ router.get("/register",function(req,res){
  
          }),function(req, res) {
  
-             res.redirect('/');
+             res.redirect('/campgrounds');
    });
  
    // LOGOUT ROUTE
