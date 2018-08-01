@@ -12,21 +12,25 @@
     </div>
     <div class="col-md-9">
       <div class="img-thumbnail">
-        <img class=" img-fluid" width="100%;"height="auto;" src="<%= campgrounds.image %>" >
+        <img class=" img-fluid" width="100%;"height="auto;" src="<%= campground.image %>" >
         <div class="caption p-3">
            <h4> $10-night </h4>
-        <h4><a href=""><%= campgrounds.name %></a></h4>
+        <h4><a href=""><%= campground.name %></a></h4>
+        
+       <p class="p-3">Submited by-<i><strong><%= campground.author.username %></strong></i></p>
         </div>
-        <p class="p-3"><%= campgrounds.description %></p>
+        <p class="p-3"><%= campground.description %></p>
       </div>
+  
+
       <div class="p-5">
           <div class="text-right">
-              <a  class="btn btn-success" href="/campgrounds/<%= campgrounds._id %>/comments/new">
+              <a  class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">
                 Add a New Comment
               </a>
          </div>
          <div>
-            <% campgrounds.comments.forEach(function(comment){ %>
+            <% campground.comments.forEach(function(comment){ %>
               <p><strong><%= comment.author.username %></strong>-<span><%= comment.text %></span><span class="blockquote-footer font-italic"><%= comment.Created.toDateString()%></span></p>
               <% });%>
          </div>

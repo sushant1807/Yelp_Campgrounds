@@ -17,15 +17,20 @@ var Campground = require("../models/campground");
   //POST ALL CAMPGROUNDS TO DB AND REDIRECT TO CAMGROUNDS PAGE
   
   router.post("/",isLoggedIn,function(req,res){
-  
-  
-    var newCampground = req.body.Campground;
+    var name = req.body.name;
+    var image = req.body.image;
+    var description= req.body.description;
+    var author = {
+      id:req.user._id,
+      username:req.user.username
+     }
+     var newCampground = {name :name,image:image,description:description,author:author}
   
     Campground.create(newCampground,function(err,newlyCreated){
       if(err){
           console.log(err);
       }else{
-        res.redirect("/campgrounds");
+         res.redirect("/campgrounds");
       }
     }); 
   });
@@ -46,7 +51,7 @@ var Campground = require("../models/campground");
         if(err){
            console.log(err);
            }else{
-          res.render("campgrounds/show",{campgrounds:foundCampground});
+          res.render("campgrounds/show",{campground:foundCampground});
         };
       });
    });
