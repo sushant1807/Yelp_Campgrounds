@@ -58,28 +58,22 @@ router.use(methodOverride('_method'));
       });
    });
 
-   //middleware 
-  function isLoggedIn(req,res,next){
-    if(req.isAuthenticated()){
-      return next();
-    }
-    res.redirect("/login");
-  }
+  
   //EDIT CAMPGROUND ROUTE
+       router.get("/:id/edit",CheckCampgroundOwnership,function(req,res){
+        Campground.findById(req.params.id,function(err,foundCampground){
+          if(err){
+            res.send("Something went wrong");
+          }else{ 
+        res.render("campgrounds/edit",{campground : foundCampground});
 
-
-  router.get("/:id/edit",function(req,res){
-    Campground.findById(req.params.id,function(err,foundCampground){
-           if(err){
-             res.redirect("/campgrounds")
-           }else{
-            res.render("campgrounds/edit",{campground : foundCampground});
-           }
+          }
           });
-      });
+       });
 
       //UPDATE CAMPGROUND ROUTE
-      router.put("/:id",function(req,res){
+
+      router.put("/:id", CheckCampgroundOwnership,function(req,res){
         var name = req.body.name;
         var image = req.body.image;
         var description =req.body.description ;
@@ -96,9 +90,8 @@ router.use(methodOverride('_method'));
 
         //DELETE CAMPGROUND 
 
-        router.delete("/:id",function(req,res){
-          
-          Campground.findByIdAndRemove(req.params.id,function(err){
+        router.delete("/:id",CheckCampgroundOwnership,function(req,res){
+           Campground.findByIdAndRemove(req.params.id,function(err){
             if(err){
               res.send(err);
             }else{
@@ -106,6 +99,39 @@ router.use(methodOverride('_method'));
             }
           });
         });
+
+    //MIDDLEWARE
+
+  function isLoggedIn(req,res,next){
+    if(req.isAuthenticated()){
+      return next();
+    }
+    res.redirect("/login");
+  }
+
+  function CheckCampgroundOwnership(req,res,next){
+          //is User logged In?
+  if(req.isAuthenticated()){
+      Campground.findById(req.params.id,function(err,foundCampground){
+     if(err){
+        res.redirect("/campgrounds")
+      }else{
+          //check current user own the campground 
+          if(foundCampground.author.id.equals(req.user._id)){
+           next();
+
+          }else {
+            res.send("You are not allowed to do this");
+          }
+         }
+     });
+    
+  }else{
+    res.send("You are not allowed to This");
+  } 
+ }
+   
+
 
     
   module.exports = router;
