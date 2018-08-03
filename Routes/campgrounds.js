@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
 var methodOverride = require("method-override");
+var middleware =require("../Middleware");
 router.use(methodOverride('_method'));
   
   //GET ALL CAMPGROUNDS TO INDEX PAGE 
@@ -18,7 +19,7 @@ router.use(methodOverride('_method'));
   
   //POST ALL CAMPGROUNDS TO DB AND REDIRECT TO CAMGROUNDS PAGE
   
-  router.post("/",isLoggedIn,function(req,res){
+  router.post("/", middleware.isLoggedIn,function(req,res){
     var name = req.body.name;
     var image = req.body.image;
     var description= req.body.description;
@@ -39,7 +40,7 @@ router.use(methodOverride('_method'));
   
   //ADD NEW CAMPGROUND TEMPLATE
   
-  router.get("/new", isLoggedIn,function(req,res){
+  router.get("/new", middleware.isLoggedIn,function(req,res){
   
   res.render("campgrounds/new");
   
@@ -60,7 +61,7 @@ router.use(methodOverride('_method'));
 
   
   //EDIT CAMPGROUND ROUTE
-       router.get("/:id/edit",CheckCampgroundOwnership,function(req,res){
+       router.get("/:id/edit",middleware.checkCampgroundOwnership,function(req,res){
         Campground.findById(req.params.id,function(err,foundCampground){
           if(err){
             res.send("Something went wrong");
@@ -73,7 +74,7 @@ router.use(methodOverride('_method'));
 
       //UPDATE CAMPGROUND ROUTE
 
-      router.put("/:id", CheckCampgroundOwnership,function(req,res){
+      router.put("/:id", middleware.checkCampgroundOwnership,function(req,res){
         var name = req.body.name;
         var image = req.body.image;
         var description =req.body.description ;
@@ -90,7 +91,7 @@ router.use(methodOverride('_method'));
 
         //DELETE CAMPGROUND 
 
-        router.delete("/:id",CheckCampgroundOwnership,function(req,res){
+        router.delete("/:id",middleware.checkCampgroundOwnership,function(req,res){
            Campground.findByIdAndRemove(req.params.id,function(err){
             if(err){
               res.send(err);
@@ -101,37 +102,6 @@ router.use(methodOverride('_method'));
         });
 
     //MIDDLEWARE
-
-  function isLoggedIn(req,res,next){
-    if(req.isAuthenticated()){
-      return next();
-    }
-    res.redirect("/login");
-  }
-
-  function CheckCampgroundOwnership(req,res,next){
-          //is User logged In?
-  if(req.isAuthenticated()){
-      Campground.findById(req.params.id,function(err,foundCampground){
-     if(err){
-        res.redirect("/campgrounds")
-      }else{
-          //check current user own the campground 
-          if(foundCampground.author.id.equals(req.user._id)){
-           next();
-
-          }else {
-            res.send("You are not allowed to do this");
-          }
-         }
-     });
-    
-  }else{
-    res.send("You are not allowed to This");
-  } 
- }
-   
-
 
     
   module.exports = router;

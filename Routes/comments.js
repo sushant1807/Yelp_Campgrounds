@@ -1,10 +1,12 @@
 var express = require("express");
-var router = express.Router({mergeParams:true});
+var router = express.Router();
 var Campground = require("../models/campground");
-var Comment = require("../models/comment")
+var Comment = require("../models/comment");
+var  middleware =require("../Middleware");
 
 
-router.get("/new",isLoggedIn,function(req,res){
+
+router.get("/new", middleware.isLoggedIn,function(req,res){
   //find capmground by ID
   Campground.findById(req.params.id,function(err,campground){
     if(err){
@@ -18,7 +20,7 @@ router.get("/new",isLoggedIn,function(req,res){
 
  //POST ALL COMMENTS ROUTE
 
-router.post("/",isLoggedIn,function(req,res){
+router.post("/",middleware.isLoggedIn,function(req,res){
  //lookup campground using ID
 Campground.findById(req.params.id,function(err,campground){
   if(err){
@@ -28,13 +30,13 @@ Campground.findById(req.params.id,function(err,campground){
     Comment.create(req.body.comment ,function(err,comment){
       if(err){
           console.log(err);
-      }else{
-       comment.author.id = req.user._id;
-       comment.author.username = req.user.username;
-        comment.save();
-        campground.comments.push(comment);
-        campground.save();
-        res.redirect('/campgrounds/'+campground._id);
+       }else{
+         comment.author.id = req.user._id;
+         comment.author.username = req.user.username;
+         comment.save();
+         campground.comments.push(comment);
+         campground.save();
+         res.redirect('/campgrounds/'+campground._id);
        }
     });
   }
@@ -43,7 +45,8 @@ Campground.findById(req.params.id,function(err,campground){
 
 //EDIT COMMENT 
 
-router.get("/:comment_id/edit",function(req,res){
+router.get("/:comment_id/edit", middleware.checkCommentsOwnership ,function(req,res){
+  //findbyId and comment
   Comment.findById(req.params.comment_id,function(err,foundComment){
     if(err){
       res.send(err)
@@ -56,10 +59,10 @@ router.get("/:comment_id/edit",function(req,res){
 //UPDATE COMMENT
 
 router.put("/:comment_id",function(req,res){
-
-Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment,function(err,updatedComment){
+  //findbyId and Remove
+ Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment,function(err,updatedComment){
   if(err){
-    res.redirect("/back");
+    res.redirect("back");
   }else{
     res.redirect("/campgrounds/"+req.params.id);
   }
@@ -77,14 +80,5 @@ router.delete("/:comment_id",function(req,res){
    }
  });
 });
-
-//MIDDLEWARE 
-
-function isLoggedIn(req,res,next){
-  if(req.isAuthenticated()){
-    return next();
-  }
-  res.redirect("/login");
-}
 
 module.exports = router;

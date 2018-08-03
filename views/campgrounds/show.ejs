@@ -38,12 +38,13 @@
          <div>
             <% campground.comments.forEach(function(comment){ %>
               <p><strong><%= comment.author.username %></strong>-<span><%= comment.text %></span><span class="blockquote-footer font-italic"><%= comment.Created.toDateString()%></span></p>
-            
+              <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
               <a class=" btn btn-sm btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%=comment._id%>/edit">Edit</a>  
               
               <form  id="delete-form" action="/campgrounds/<%=campground._id%>/comments/<%=comment._id%>?_method=DELETE" method="POST">
                 <button class="btn btn-danger btn-sm" type="submit" >Delete</button>
             </form>
+            <% } %>
               <% });%>
     
          </div>
