@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router({mergeParams:true});
 var Campground = require("../models/campground");
 var Comment = require("../models/comment")
-var user = require("../models/user");
+
 
 router.get("/new",isLoggedIn,function(req,res){
   //find capmground by ID
@@ -35,13 +35,51 @@ Campground.findById(req.params.id,function(err,campground){
         campground.comments.push(comment);
         campground.save();
         res.redirect('/campgrounds/'+campground._id);
-       
-      }
+       }
     });
-  
   }
 });
 });
+
+//EDIT COMMENT 
+
+router.get("/:comment_id/edit",function(req,res){
+  Comment.findById(req.params.comment_id,function(err,foundComment){
+    if(err){
+      res.send(err)
+    }else{
+      res.render("comments/edit",{campground_id:req.params.id,comment:foundComment});
+    }
+  })
+});
+
+//UPDATE COMMENT
+
+router.put("/:comment_id",function(req,res){
+
+Comment.findByIdAndUpdate(req.params.comment_id,req.body.comment,function(err,updatedComment){
+  if(err){
+    res.redirect("/back");
+  }else{
+    res.redirect("/campgrounds/"+req.params.id);
+  }
+})
+});
+
+//DELETE COMMENT
+
+router.delete("/:comment_id",function(req,res){
+  Comment.findByIdAndRemove(req.params.comment_id,function(err){
+   if(err){
+     res.send(err);
+   }else{
+     res.redirect("/campgrounds/"+req.params.id);
+   }
+ });
+});
+
+//MIDDLEWARE 
+
 function isLoggedIn(req,res,next){
   if(req.isAuthenticated()){
     return next();
