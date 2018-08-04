@@ -31,10 +31,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
 //Current User
 
 app.use(function(req,res,next){
   res.locals.currentUser = req.user;
+  res.locals.error = req.flash("error");
+  res.locals.success = req.flash("success");
   next();
 });
 
@@ -43,6 +46,8 @@ app.use(function(req,res,next){
 app.use(indexRoute);
 app.use("/campgrounds/:id/comments",CommentsRoute);
 app.use( "/campgrounds",CampgroundsRoute);
+
+
 
 //APP RUNNING AT PORT 3000
 app.listen(3000,function(){

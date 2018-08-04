@@ -9,6 +9,7 @@ var commentSchema = new mongoose.Schema({
          },
     username:String
     },
-  Created:{type:Date,default:Date.now}
+    Created:{type:Date,default:Date.now}
+
 });
 module.exports = mongoose.model("Comment",commentSchema);

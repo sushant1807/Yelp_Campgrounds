@@ -24,6 +24,7 @@ router.get("/register",function(req,res){
      return res.render("register");
    }
    passport.authenticate("local")(req,res,function(){
+    req.flash("success","You are Suceesfully Registred! please Login  to Continue");
      res.redirect("/login");
    });
  });
@@ -32,24 +33,26 @@ router.get("/register",function(req,res){
  //SHOW- LOGIN FORM
  
  router.get("/login",function(req,res){
-   res.render("login",{message : req.flash("error")});
+   res.render("login");
  });
 
  //POST LOGIN ROUTE 
  
  router.post('/login', passport.authenticate('local',
-         {   successRedirect:"/campgrounds",
-             failureRedirect: '/login',
+    { 
+    successRedirect:"/campgrounds",
+    failureRedirect: '/login',
  
-         }),function(req, res) {
- 
-             res.redirect('/campgrounds');
+   }),function(req, res) {
+       
+           
    });
  
    // LOGOUT ROUTE
    
    router.get("/logout",function(req,res){
       req.logout();
+      req.flash("success","Successfully Logged out !")
       res.redirect("/");
  
    });
@@ -58,6 +61,7 @@ router.get("/register",function(req,res){
      if(req.isAuthenticated()){
        return next();
      }
+
      res.redirect("/login");
    }
 

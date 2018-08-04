@@ -66,9 +66,8 @@ router.use(methodOverride('_method'));
           if(err){
             res.send("Something went wrong");
           }else{ 
-        res.render("campgrounds/edit",{campground : foundCampground});
-
-          }
+            res.render("campgrounds/edit",{campground : foundCampground});
+               }
           });
        });
 
