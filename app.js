@@ -15,8 +15,7 @@ var User = require("./models/user");
 mongoose.connect("mongodb://localhost:27017/yelp_camp",{ useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended:true}));
 app.set("view engine","ejs");
- app.use(express.static(__dirname + "/public"));
-// app.use('/public', express.static(__dirname + "/public"))
+app.use(express.static(__dirname + "/public"));
 app.use(methodOverride('_method'))
 app.use(flash());
 
@@ -52,5 +51,5 @@ app.use( "/campgrounds",CampgroundsRoute);
 
 //APP RUNNING AT PORT 3000
 app.listen(3000,function(){
-console.log("yelpcamp Server has strated....");
+console.log("yelpcamp Server has strated.... Running at https://localhost:3000");
 });

@@ -14,8 +14,9 @@
       <div class="img-thumbnail">
         <img class=" img-fluid" width="100%;"height="auto;" src="<%= campground.image %>" >
         <div class="caption p-3">
-           <h4> $10-night </h4>
-        <h4><a href=""><%= campground.name %></a></h4>
+            <h4> $<%= campground.price %>-night </h4>
+      <h4><a href=""><%= campground.name %></a></h4>
+       
         
        <p class="p-3"><em></em>Submited by-<%= campground.author.username %></em></p>
         </div>
