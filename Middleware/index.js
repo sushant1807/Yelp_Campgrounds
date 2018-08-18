@@ -23,7 +23,7 @@ var middlewareObj = {};
               });
          }else{
           req.flash("error","you need to be logged in to do that")
-          res.redirect("/login");
+          res.redirect("back");
          } 
      };
 

@@ -38,7 +38,7 @@ router.use(methodOverride('_method'));
     }); 
   });
   
-  //ADD NEW CAMPGROUND TEMPLATE
+  //GET NEW CAMPGROUND TEMPLATE
   
   router.get("/new", middleware.isLoggedIn,function(req,res){
   
@@ -95,6 +95,7 @@ router.use(methodOverride('_method'));
             if(err){
               res.send(err);
             }else{
+              req.flash("success","Deleted Campground");
               res.redirect("/campgrounds");
             }
           });

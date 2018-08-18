@@ -4,10 +4,6 @@ var  middleware = require("../Middleware");
 var Campground = require("../models/campground");
 var Comment = require("../models/comment");
 
-
-
-
-
 //GET THE NEW COMMENTS FORM 
 
 router.get("/new", middleware.isLoggedIn ,function(req,res){
